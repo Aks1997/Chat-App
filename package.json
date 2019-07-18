@@ -1,0 +1,21 @@
+{
+  "name": "websocketserver",
+  "version": "1.0.0",
+  "description": "websocket project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "akhil",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "mongoose": "^5.6.4",
+    "socket.io": "^2.2.0",
+    "ws": "^7.1.0"
+  }
+}
