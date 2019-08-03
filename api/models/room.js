@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const user = require('./user');
+const users = require('./user');
 
 const roomSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -8,7 +8,7 @@ const roomSchema = mongoose.Schema({
     password: {type: String, required: true},
     users: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: user
+        ref: users
     }]
 })
 

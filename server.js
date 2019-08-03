@@ -54,15 +54,21 @@ io.on('connection', (socket)=>{
             message: data.message,
             time: new Date().getTime()
         });
-    })
+    });
 
     socket.on('disconnect', ()=>{
         currUser.active = false;
         console.log(`${socket.id} disconnected`);
-        setTimeout(()=>{
-            if(!currUser.active)
-                chatUser.removeUser(currUser._id, socket);
-        }, 5000);
+        socket.to(currUser.room).broadcast.emit("userDisconnected",
+                                                {key: socket.id});
+        chatUser.removeUser(currUser._id, socket);
+        // setTimeout(()=>{
+        //     if(!currUser.active){
+        //         socket.to(currUser.room).broadcast.emit("userDisconnected",
+        //                                         {key: socket.id});
+        //         chatUser.removeUser(currUser._id, socket);
+        //     }    
+        // }, 120000);
     });
 });
 

@@ -77,6 +77,9 @@ class user{
                                         console.log('Room Updated');
                                         socket.join(room);
                                         socket.emit('roomCreationStatus', {_id: res._id, id: id, name: name, room: room, status: true, type: type});
+                                        socket.to(room).broadcast.emit("userConnected",
+                                                {id: id,
+                                                    name: name});
                                     })
                                     .catch(err=>{
                                         console.log('Error', err);
@@ -165,6 +168,56 @@ router.get('/' ,(req, res, next)=>{
         })
         .catch(err=>{
             res.status(500).json({message: `Error ${err}`});
+        })
+});
+
+router.get('/getonlineusers' ,(req, res, next)=>{
+
+    User.findById(req.query._id)
+        // .populate({path:"room", select:"room._id"})
+        .exec()
+        .then(result=>{
+            Room.findOne({_id:result.room._id})
+                .populate({path: 'users', model: User})
+                .exec(function(err, value){
+                    if(err){
+                        res.status(500).json(err);
+                        return;
+                    }
+                    var re = value.users.filter(v=>{
+                        if(v._id!=req.query._id)
+                            return({id: v.id, name: v.name});
+                    });
+                    res.status(200).json(re);
+                });
+        })
+        .catch(err=>{
+            res.status(500).json(err);
+        })
+});
+
+router.get('/testget', (req, res, next)=>{
+    console.log(req.query._id);
+    User.findById(req.query._id)
+        // .populate({path:"room", select:"room._id"})
+        .exec()
+        .then(result=>{
+            Room.findOne({_id:result.room._id})
+                .populate({path: 'users', model: User})
+                .exec(function(err, value){
+                    if(err){
+                        res.status(500).json(err);
+                        return;
+                    }
+                    var re = value.users.filter(v=>{
+                        if(v._id!=req.query._id)
+                            return({id: v.id, name: v.name});
+                    });
+                    res.status(200).json(re);
+                });
+        })
+        .catch(err=>{
+            res.status(500).json(err);
         })
 });
 
